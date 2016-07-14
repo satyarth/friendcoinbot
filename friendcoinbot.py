@@ -46,6 +46,9 @@ def tip(bot, update):
         bot.sendMessage(update.message.chat_id, text="l2tip: wrong number of arguments")
         return
 
+    if to_username[0] == '@':
+        to_username = to_username[1:]
+
     for username in [from_username, to_username]:
         if not r.exists(username):
             init_balance(username)
