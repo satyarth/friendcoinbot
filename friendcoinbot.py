@@ -69,7 +69,7 @@ def tip(bot, update):
         return
 
     execute_tip(from_username, to_username, amount)
-    bot.sendMessage(update.message.chat_id, text=from_username + "["+str(balance(from_username))+"] tipped " + to_username+"["+str(balance(to_username))+"]" + " " + str(amount))
+    bot.sendMessage(update.message.chat_id, text=from_username + " ["+str(balance(from_username))+"] tipped " + to_username+" ["+str(balance(to_username))+"]" + " " + str(amount))
 
 
 def main():
