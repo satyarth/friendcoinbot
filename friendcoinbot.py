@@ -5,8 +5,6 @@ from config import key
 r = redis.StrictRedis(host="localhost", port=6379, charset="utf-8", decode_responses=True)
 
 
-logger = logging.getLogger(__name__)
-
 def init_balance(username):
     r.set(username, "0")
 
