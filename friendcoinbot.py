@@ -15,10 +15,8 @@ def balance(username):
 
 
 def execute_tip(from_, to, amount):
-    balance_from = float(r.get(from_))
-    r.set(from_, str(balance_from - amount))
-    balance_to = float(r.get(to))
-    r.set(to, str(balance_to + amount))
+    r.set(from_, balance(from_) - amount)
+    r.set(to, balance(to) + amount)
 
 
 def start(bot, update):
