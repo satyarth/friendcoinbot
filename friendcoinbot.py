@@ -12,7 +12,7 @@ def init_balance(username):
 
 def balance(username):
     balance = r.get(username)
-    return float(balance)
+    return int(balance)
 
 
 def execute_tip(from_, to, amount):
@@ -55,9 +55,9 @@ def tip(bot, update):
             init_balance(username)
 
     try:
-        amount = float(amount)
+        amount = int(amount)
     except ValueError:
-        bot.sendMessage(update.message.chat_id, text="l2tip: amount needs to be a float")
+        bot.sendMessage(update.message.chat_id, text="l2tip: amount needs to be an int")
         return
 
     if isnan(amount) or isinf(amount):
@@ -69,11 +69,7 @@ def tip(bot, update):
         return
 
     execute_tip(from_username, to_username, amount)
-    bot.sendMessage(update.message.chat_id, text=from_username + " tipped " + to_username + " " + str(amount))
-
-
-def error(bot, update, error):
-    logger.warn('Update "%s" caused error "%s"' % (update, error))
+    bot.sendMessage(update.message.chat_id, text=from_username + "["+str(balance(from_username))+"] tipped " + to_username+"["+str(balance(to_username))+"]" + " " + str(amount))
 
 
 def main():
@@ -84,7 +80,6 @@ def main():
     dp.add_handler(CommandHandler("tip", tip))
     dp.add_handler(CommandHandler("balance", get_balance))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_error_handler(error)
     updater.start_polling()
     updater.idle()
 
