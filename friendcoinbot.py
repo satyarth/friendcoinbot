@@ -5,6 +5,8 @@ from config import key
 
 r = redis.StrictRedis(host="localhost", port=6379, charset="utf-8", decode_responses=True)
 
+class NotFound(Exception):
+    pass
 
 def init_balance(username):
     r.set(username, "0")
@@ -12,11 +14,17 @@ def init_balance(username):
 
 def balance(username):
     balance = r.get(username)
+    if balance == None:
+        raise NotFound
     return float(balance)
 
 
+def truncate(num):
+    return '{0:g}'.format(num) + "💦"
+
+
 def execute_tip(from_, to, amount):
-    r.set(from_, balance(from_) - amount)
+    r.set(from_, balance(from_) - amount/2)
     r.set(to, balance(to) + amount)
 
 
@@ -34,8 +42,22 @@ def alias():
 
 def get_balance(bot, update):
     from_username = update.message.from_user['username']
-    balance = r.get(from_username)    
-    bot.sendMessage(update.message.chat_id, text="Balance for " + from_username + ": " + str(balance))
+    query = update.message.text.split(' ')
+    if len(query) == 1:
+        bot.sendMessage(update.message.chat_id, text="Balance for " + from_username + ": " + truncate(balance(from_username)))
+    elif query[1] == '*':
+        response = "Balances:\n"
+        for username in r.keys('*'):
+            response += username + ": " + truncate(balance(username)) + "\n"
+        bot.sendMessage(update.message.chat_id, text=response)
+    else:
+        response = "Balances:\n"
+        for username in query[1:]:
+            try:
+                response += username + ": " + truncate(balance(username)) + "\n"
+            except NotFound:
+                response += "l2tip: " + username + " doesn't exist\n"
+        bot.sendMessage(update.message.chat_id, text=response)
 
 
 def tip(bot, update):
@@ -64,13 +86,18 @@ def tip(bot, update):
         bot.sendMessage(update.message.chat_id, text="l2tip: u cheeky scrub")
         return
 
+    if from_username == to_username:
+        bot.sendMessage(update.message.chat_id, text="l2tip: ))<>(( back and forth... forever")
+        return
+
     if amount < 0:
         bot.sendMessage(update.message.chat_id, text="l2tip: amount needs to be non-negative. do you think this is a motherfucking game?")
         return
 
     execute_tip(from_username, to_username, amount)
-    bot.sendMessage(update.message.chat_id, text=from_username + " ["+str(balance(from_username))+"] tipped " + to_username+" ["+str(balance(to_username))+"]" + " " + str(amount))
-
+    bot.sendMessage(update.message.chat_id, parse_mode='Markdown', text="*"+to_username + "* was tipped *" + truncate(amount) + "* by *" + from_username+"*\n" \
+                    + to_username +": "+ truncate(balance(to_username))+"\n" \
+                    + from_username +": "+ truncate(balance(from_username)))
 
 
 def error(bot, update, error):
