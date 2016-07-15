@@ -60,6 +60,10 @@ def tip(bot, update):
         bot.sendMessage(update.message.chat_id, text="l2tip: amount needs to be a float")
         return
 
+    if isnan(amount) or isinf(amount):
+        bot.sendMessage(update.message.chat_id, text="l2tip: u cheeky scrub")
+        return
+
     if amount < 0:
         bot.sendMessage(update.message.chat_id, text="l2tip: amount needs to be non-negative. do you think this is a motherfucking game?")
         return
