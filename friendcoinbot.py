@@ -54,10 +54,10 @@ def get_balance(bot, update):
     else:
         response = "Balances:\n"
         for username in query[1:]:
-            try:
-                response += username + ": " + truncate(balance(username)) + "\n"
-            except NotFound:
-                response += "l2tip: " + username + " doesn't exist\n"
+            # try:
+            response += username + ": " + truncate(balance(username)) + "\n"
+            # except NotFound:
+            #     response += "l2tip: " + username + " doesn't exist\n"
         bot.sendMessage(update.message.chat_id, text=response)
 
 
@@ -101,10 +101,6 @@ def tip(bot, update):
                     + from_username +": "+ truncate(balance(from_username)))
 
 
-def error(bot, update, error):
-    logger.warn('Update "%s" caused error "%s"' % (update, error))
-
-
 def main():
     updater = Updater(key)
 
@@ -113,7 +109,6 @@ def main():
     dp.add_handler(CommandHandler("tip", tip))
     dp.add_handler(CommandHandler("balance", get_balance))
     dp.add_handler(CommandHandler("help", help))
-    dp.add_error_handler(error)
     updater.start_polling()
     updater.idle()
 
