@@ -54,7 +54,7 @@ def get_balance(bot, update):
             deets.append((username, balance(username)))
             print(deets)
         print(deets)
-        for deet in sorted(deets, key=lambda -x:x[1]):
+        for deet in sorted(deets, key=lambda x:-x[1]):
             response += deet[0] + ": " + truncate(deet[1]) + "\n"
         bot.sendMessage(update.message.chat_id, text=response)
     else:
