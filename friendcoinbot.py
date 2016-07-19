@@ -43,19 +43,13 @@ def alias():
 def get_balance(bot, update):
     from_username = update.message.from_user['username']
     query = update.message.text.split(' ')
-    print(query)
     if len(query) == 1:
         bot.sendMessage(update.message.chat_id, text="Balance for " + from_username + ": " + truncate(balance(from_username)))
     elif query[1] == '*':
         response = "Balances:\n"
         deets = []
-        for username in r.keys('*'):
-            print(username)
-            deets.append((username, balance(username)))
-            print(deets)
-        print(deets)
-        for deet in sorted(deets, key=lambda x:-x[1]):
-            response += deet[0] + ": " + truncate(deet[1]) + "\n"
+        for username in sorted(r.keys('*'), key=lambda x:-balance(x)):
+            response += username + ": " + truncate(balance(username)) + "\n"
         bot.sendMessage(update.message.chat_id, text=response)
     else:
         response = "Balances:\n"
