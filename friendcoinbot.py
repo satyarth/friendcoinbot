@@ -54,10 +54,12 @@ def get_balance(bot, update):
     else:
         response = "Balances:\n"
         for username in query[1:]:
-            # try:
-            response += username + ": " + truncate(balance(username)) + "\n"
-            # except NotFound:
-            #     response += "l2tip: " + username + " doesn't exist\n"
+            if username[0] == '@':
+                username = username[1:]
+            try:
+                response += username + ": " + truncate(balance(username)) + "\n"
+            except NotFound:
+                response += "l2tip: " + username + " doesn't exist\n"
         bot.sendMessage(update.message.chat_id, text=response)
 
 
