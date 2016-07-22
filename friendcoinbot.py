@@ -1,9 +1,8 @@
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-import redis
 from math import isnan, isinf
 from config import key
 
-r = redis.StrictRedis(host="localhost", port=6379, charset="utf-8", decode_responses=True)
+r = {}
 
 class NotFound(Exception):
     pass
