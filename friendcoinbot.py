@@ -59,12 +59,12 @@ def utalk(bot, update):
         return
     
     talker = update.message.from_user['username']
-    makes_bank(talker, 0.1)
-    
+    previous_talker = previous_message(update).from_user['username']
     first_word = update.message.text.split()[0]
     
-    if is_lol(first_word):
-        previous_talker = previous_message(update).from_user['username']
+    makes_bank(talker, 0.1)
+    
+    if is_lol(first_word) and talker != first_talker:
         print("lol from " + talker + " to " + previous_talker)
         makes_bank(previous_talker, 1)
         makes_bank(talker, 0.2)
