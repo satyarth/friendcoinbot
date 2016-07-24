@@ -18,7 +18,7 @@ def makes_bank(username, dolla):
     r[username] += dolla
 
 def truncate(num):
-    return '{0:g}'.format(num) + "💦"
+    return '{0:g}'.format(num) + "🔥"
 
 def start(bot, update):
     bot.sendMessage(update.message.chat_id, text='Hi!')
