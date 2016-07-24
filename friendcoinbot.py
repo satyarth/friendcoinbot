@@ -65,7 +65,7 @@ def utalk(bot, update):
     
     makes_bank(talker, 0.1)
     
-    if is_lol(first_word) and talker != first_talker:
+    if is_lol(first_word) and talker != previous_talker:
         print("lol from " + talker + " to " + previous_talker)
         makes_bank(previous_talker, 1)
         makes_bank(talker, 0.2)
