@@ -38,6 +38,7 @@ def is_lol(str):
         "kek",
         "rofl",
         "lmao",
+        "ds",
         "stf",
         "[waough][waough]*",
         "wow[sz]er[sz]",
